@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja Gás & Água — Controle Financeiro</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#F7F8FA;--bg2:#FFFFFF;--bg3:#F0F2F5;--border:#E4E6EA;--text:#1A1D23;--text2:#6B7280;--accent:#2563EB;--green:#059669;--red:#DC2626;--amber:#D97706;--teal:#0891B2;--radius:10px;--shadow:0 1px 4px rgba(0,0,0,.08)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:200px;min-width:200px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:12px 8px;gap:2px;overflow-y:auto}
+.logo{padding:8px 8px 14px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.logo-t{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+.logo-s{font-size:11px;color:var(--text2);margin-top:2px}
+.nav{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);border:none;background:none;width:100%;text-align:left;transition:all .15s}
+.nav:hover{background:var(--bg3);color:var(--text)}
+.nav.on{background:#EFF6FF;color:var(--accent);font-weight:500}
+.nav i{font-size:16px;width:18px}
+.main{flex:1;overflow-y:auto;padding:20px;background:var(--bg)}
+.pg{display:none}.pg.on{display:block}
+.ptit{font-size:18px;font-weight:600;margin-bottom:3px}
+.psub{font-size:12px;color:var(--text2);margin-bottom:18px}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
+.kcard{background:var(--bg2);border-radius:var(--radius);padding:14px;cursor:pointer;border:1.5px solid transparent;box-shadow:var(--shadow);transition:all .15s}
+.kcard:hover{border-color:var(--border);transform:translateY(-1px)}
+.kcard.on{border-color:var(--accent)}
+.klbl{font-size:11px;color:var(--text2);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.kval{font-size:22px;font-weight:600}
+.kval.g{color:var(--green)}.kval.r{color:var(--red)}.kval.b{color:var(--accent)}.kval.a{color:var(--amber)}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:none;box-shadow:var(--shadow)}
+.panel.on{display:block}
+.ptitle{font-size:13px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--text2);font-size:18px;line-height:1;padding:2px}
+.xbtn:hover{color:var(--text)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.ctit{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+label{font-size:11px;color:var(--text2);display:block;margin-bottom:3px;font-weight:500}
+input,select{width:100%;font-size:13px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);transition:border .15s}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.btn{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:500;transition:all .15s}
+.btn:hover{background:var(--bg3)}
+.btn.p{background:var(--accent);border-color:var(--accent);color:#fff}.btn.p:hover{background:#1D4ED8}
+.btn.sm{padding:4px 8px;font-size:11px}
+.twrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:8px 10px;font-size:11px;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg3)}
+td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.bg{background:#D1FAE5;color:#065F46}.br{background:#FEE2E2;color:#991B1B}
+.bb{background:#DBEAFE;color:#1E40AF}.ba{background:#FEF3C7;color:#92400E}
+.bgr{background:#F3F4F6;color:#374151}
+.res{background:var(--bg3);border-radius:8px;padding:12px;margin-top:8px}
+.resrow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
+.resrow:last-child{border:none;font-weight:600;font-size:13px;padding-top:8px}
+.drow{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;font-size:12px;border-radius:8px;margin-bottom:2px;cursor:pointer;transition:background .1s}
+.drow:hover{background:var(--bg3)}
+.drow.dh{background:var(--bg3);font-weight:600;cursor:default}
+.drow.dt{background:#DBEAFE;color:#1E40AF;font-weight:600}.drow.dt:hover{background:#BFDBFE}
+.drow.dl{background:#D1FAE5;color:#065F46;font-weight:600}.drow.dl:hover{background:#A7F3D0}
+.drow.dp{background:#FEE2E2;color:#991B1B;font-weight:600}.drow.dp:hover{background:#FECACA}
+.drow.di{padding-left:22px;color:var(--text2)}
+.chart-w{position:relative;width:100%;height:210px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.stock-bar{height:5px;border-radius:3px;background:var(--border);margin-top:5px;overflow:hidden}
+.stock-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .4s}
+.pr-rrow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+.pr-rrow:last-child{border:none;padding-top:10px}
+.badge-g{background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-r{background:#FEE2E2;color:#991B1B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-a{background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.save-indicator{position:fixed;bottom:16px;right:16px;background:#059669;color:#fff;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+.save-indicator.show{opacity:1}
+@media(max-width:768px){
+  .sidebar{width:48px;min-width:48px;padding:8px 4px}
+  .nav span,.logo-t span,.logo-s{display:none}
+  .logo-t{justify-content:center}
+  .main{padding:12px}
+  .row4{grid-template-columns:1fr 1fr}
+  .two{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="save-indicator" id="save-ind"><i class="ti ti-check"></i> Dados salvos</div>
+
+<div class="app">
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-t"><i class="ti ti-flame" style="color:#DC2626;font-size:18px"></i> <span>Gás & Água</span></div>
+    <div class="logo-s" id="sdate"></div>
+  </div>
+  <button class="nav on" onclick="nav('dashboard')" id="n-dashboard"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></button>
+  <button class="nav" onclick="nav('vendas')" id="n-vendas"><i class="ti ti-shopping-cart"></i><span>Vendas Diárias</span></button>
+  <button class="nav" onclick="nav('estoque')" id="n-estoque"><i class="ti ti-package"></i><span>Estoque</span></button>
+  <button class="nav" onclick="nav('caixa')" id="n-caixa"><i class="ti ti-wallet"></i><span>Fluxo de Caixa</span></button>
+  <button class="nav" onclick="nav('dre')" id="n-dre"><i class="ti ti-report-analytics"></i><span>DRE</span></button>
+  <button class="nav" onclick="nav('conciliacao')" id="n-conciliacao"><i class="ti ti-scale"></i><span>Conciliação</span></button>
+  <button class="nav" onclick="nav('pagar')" id="n-pagar"><i class="ti ti-calendar-due"></i><span>Contas a Pagar</span></button>
+  <button class="nav" onclick="nav('receber')" id="n-receber"><i class="ti ti-cash"></i><span>Contas a Receber</span></button>
+  <button class="nav" onclick="nav('clientes')" id="n-clientes"><i class="ti ti-users"></i><span>Clientes</span></button>
+  <button class="nav" onclick="nav('maquininha')" id="n-maquininha"><i class="ti ti-credit-card"></i><span>Maquininha</span></button>
+  <button class="nav" onclick="nav('precificacao')" id="n-precificacao"><i class="ti ti-tag"></i><span>Precificação</span></button>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div class="pg on" id="pg-dashboard">
+  <div class="ptit">Dashboard</div>
+  <div class="psub">Clique em qualquer card para ver o detalhamento</div>
+  <div class="kgrid">
+    <div class="kcard" onclick="togglePanel('p-fat')" id="k-fat"><div class="klbl"><i class="ti ti-trending-up"></i>Faturamento</div><div class="kval g" id="kv-fat">R$ 0,00</div></div>
+    <div class="kcard" onclick="togglePanel('p-gas')" id="k-gas"><div class="klbl"><i class="ti ti-flame"></i>Vendas Gás</div><div class="kval b" id="kv-gas">R$ 0,00</div></div>
+    <div class="kcard" onclick="togglePanel('p-agua')" id="k-agua"><div class="klbl"><i class="ti ti-droplet"></i>Vendas Água</div><div class="kval b" id="kv-agua">R$ 0,00</div></div>
+    <div class="kcard" onclick="togglePanel('p-brinde')" id="k-brinde"><div class="klbl"><i class="ti ti-gift"></i>Brindes Entregues</div><div class="kval a" id="kv-brinde">0 un</div></div>
+    <div class="kcard" onclick="togglePanel('p-desp')" id="k-desp"><div class="klbl"><i class="ti ti-trending-down"></i>Despesas</div><div class="kval r" id="kv-desp">R$ 0,00</div></div>
+    <div class="kcard" onclick="togglePanel('p-lucro')" id="k-lucro"><div class="klbl"><i class="ti ti-cash"></i>Lucro Líquido</div><div class="kval g" id="kv-lucro">R$ 0,00</div></div>
+  </div>
+  <div class="panel" id="p-fat"><div class="ptitle">Faturamento por categoria<button class="xbtn" onclick="closeP('p-fat')"><i class="ti ti-x"></i></button></div><div id="c-fat"></div></div>
+  <div class="panel" id="p-gas"><div class="ptitle">Vendas de Gás<button class="xbtn" onclick="closeP('p-gas')"><i class="ti ti-x"></i></button></div><div id="c-gas"></div></div>
+  <div class="panel" id="p-agua"><div class="ptitle">Vendas de Água 20L<button class="xbtn" onclick="closeP('p-agua')"><i class="ti ti-x"></i></button></div><div id="c-agua"></div></div>
+  <div class="panel" id="p-brinde"><div class="ptitle">Brindes entregues<button class="xbtn" onclick="closeP('p-brinde')"><i class="ti ti-x"></i></button></div><div id="c-brinde"></div></div>
+  <div class="panel" id="p-desp"><div class="ptitle">Despesas<button class="xbtn" onclick="closeP('p-desp')"><i class="ti ti-x"></i></button></div><div id="c-desp"></div></div>
+  <div class="panel" id="p-lucro"><div class="ptitle">Resultado do mês<button class="xbtn" onclick="closeP('p-lucro')"><i class="ti ti-x"></i></button></div><div id="c-lucro"></div></div>
+  <div class="two">
+    <div class="card"><div class="ctit">Vendas por produto</div><div class="chart-w"><canvas id="ch1"></canvas></div></div>
+    <div class="card"><div class="ctit">Receitas x Despesas</div><div class="chart-w"><canvas id="ch2"></canvas></div></div>
+  </div>
+  <div class="card"><div class="ctit">Últimas vendas</div><div class="twrap"><table><thead><tr><th>Data</th><th>Produto</th><th>Qtd</th><th>Total</th><th>Pagamento</th><th>Canal</th><th>Brinde</th></tr></thead><tbody id="dash-tb"></tbody></table></div></div>
+</div>
+
+<!-- VENDAS -->
+<div class="pg" id="pg-vendas">
+  <div class="ptit">Vendas Diárias</div>
+  <div class="psub">Data automática. Brinde descontado a cada venda de gás.</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl"><i class="ti ti-flame"></i>Gás 13kg</div><div class="kval b" id="vst-g13">0 un</div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-flame"></i>Gás 45kg</div><div class="kval b" id="vst-g45">0 un</div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-droplet"></i>Água 20L</div><div class="kval b" id="vst-ag">0 un</div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-gift"></i>Brindes</div><div class="kval a" id="vst-br">0 un</div></div>
+  </div>
+  <div class="card">
+    <div class="row4">
+      <div><label>Data</label><input type="date" id="v-data"></div>
+      <div><label>Produto</label><select id="v-prod" onchange="calcV()"><option value="">Selecione...</option><option>Gás 13kg</option><option>Gás 45kg</option><option>Água 20L</option></select></div>
+      <div><label>Quantidade</label><select id="v-qtd" onchange="calcV()"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>15</option><option>20</option><option>30</option><option>50</option></select></div>
+      <div><label>Preço unitário (R$)</label><input type="number" id="v-preco" step="0.01" oninput="calcV()"></div>
+    </div>
+    <div class="row4">
+      <div><label>Pagamento</label><select id="v-pgto"><option>Dinheiro</option><option>PIX</option><option>Débito</option><option>Crédito à vista</option><option>Crédito parcelado</option></select></div>
+      <div><label>Canal</label><select id="v-canal"><option>Portaria</option><option>Aplicativo</option><option>Comércio</option><option>WhatsApp</option><option>Direto na loja</option></select></div>
+      <div><label>Entregador</label><input type="text" id="v-entregador" placeholder="Opcional"></div>
+      <div style="display:flex;flex-direction:column;justify-content:flex-end">
+        <div style="font-size:11px;color:var(--text2)">Total</div>
+        <div style="font-size:20px;font-weight:600;color:var(--green)" id="v-total">R$ 0,00</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div id="v-brinfo" style="font-size:11px;color:var(--amber)"></div>
+      <button class="btn p" onclick="regVenda()"><i class="ti ti-plus"></i> Registrar venda</button>
+    </div>
+  </div>
+  <div class="card"><div class="ctit">Vendas registradas</div><div class="twrap"><table><thead><tr><th>Hora</th><th>Data</th><th>Produto</th><th>Qtd</th><th>Preço</th><th>Total</th><th>Pgto</th><th>Canal</th><th>Entregador</th><th>Brinde</th><th></th></tr></thead><tbody id="v-tb"></tbody></table></div></div>
+</div>
+
+<!-- ESTOQUE -->
+<div class="pg" id="pg-estoque">
+  <div class="ptit">Estoque</div>
+  <div class="psub">Saldo = entradas − saídas (vendas deduzidas automaticamente)</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl"><i class="ti ti-flame"></i>Gás 13kg</div><div class="kval b" id="e-g13">0 un</div><div class="stock-bar"><div class="stock-fill" id="eb-g13" style="width:0%"></div></div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-flame"></i>Gás 45kg</div><div class="kval b" id="e-g45">0 un</div><div class="stock-bar"><div class="stock-fill" id="eb-g45" style="width:0%"></div></div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-droplet"></i>Água 20L</div><div class="kval b" id="e-ag">0 un</div><div class="stock-bar"><div class="stock-fill" id="eb-ag" style="width:0%"></div></div></div>
+    <div class="kcard"><div class="klbl"><i class="ti ti-gift"></i>Brindes</div><div class="kval a" id="e-br">0 un</div><div class="stock-bar"><div class="stock-fill" id="eb-br" style="width:0%;background:var(--amber)"></div></div></div>
+  </div>
+  <div class="card">
+    <div class="ctit">Lançar entrada</div>
+    <div class="row4">
+      <div><label>Data</label><input type="date" id="e-data"></div>
+      <div><label>Produto</label><select id="e-prod"><option>Gás 13kg</option><option>Gás 45kg</option><option>Água 20L</option><option>Brinde</option></select></div>
+      <div><label>Quantidade</label><input type="number" id="e-qtd" value="1" min="1"></div>
+      <div><label>Fornecedor</label><input type="text" id="e-forn" placeholder="Nome"></div>
+    </div>
+    <div class="row2">
+      <div><label>Custo unitário (R$)</label><input type="number" id="e-custo" step="0.01" placeholder="0,00"></div>
+      <div><label>Observação</label><input type="text" id="e-obs" placeholder="Opcional"></div>
+    </div>
+    <button class="btn p" onclick="lancarEst()"><i class="ti ti-plus"></i> Lançar entrada</button>
+  </div>
+  <div class="card"><div class="ctit">Histórico</div><div class="twrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Produto</th><th>Fornecedor</th><th>Qtd</th><th>Custo Un.</th><th>Total</th><th>Obs</th></tr></thead><tbody id="e-tb"></tbody></table></div></div>
+</div>
+
+<!-- FLUXO DE CAIXA -->
+<div class="pg" id="pg-caixa">
+  <div class="ptit">Fluxo de Caixa</div>
+  <div class="psub">Vendas lançadas automaticamente. Adicione despesas manualmente.</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl">Entradas</div><div class="kval g" id="fc-ent">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Saídas</div><div class="kval r" id="fc-sai">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Saldo</div><div class="kval b" id="fc-sal">R$ 0,00</div></div>
+  </div>
+  <div class="card">
+    <div class="row4">
+      <div><label>Data</label><input type="date" id="fc-data"></div>
+      <div><label>Tipo</label><select id="fc-tipo"><option value="Receita">Receita</option><option value="Despesa">Despesa</option></select></div>
+      <div><label>Categoria</label><select id="fc-cat"><option>Vendas Gás</option><option>Vendas Água</option><option>Outras Receitas</option><option>Compra Mercadoria</option><option>Compra Água</option><option>Brindes</option><option>Aluguel</option><option>Salários</option><option>Taxas</option><option>Utilities</option><option>Marketing</option><option>Outros</option></select></div>
+      <div><label>Pagamento</label><select id="fc-pgto"><option>Dinheiro</option><option>PIX</option><option>Débito</option><option>Crédito</option><option>Boleto</option><option>TED</option><option>Fiado</option></select></div>
+    </div>
+    <div class="row2">
+      <div><label>Descrição</label><input type="text" id="fc-desc" placeholder="Descreva o lançamento"></div>
+      <div><label>Valor (R$)</label><input type="number" id="fc-val" step="0.01"></div>
+    </div>
+    <button class="btn p" onclick="lancarCaixa()"><i class="ti ti-plus"></i> Lançar</button>
+  </div>
+  <div class="card"><div class="twrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Descrição</th><th>Valor</th><th>Pgto</th><th></th></tr></thead><tbody id="fc-tb"></tbody></table></div></div>
+</div>
+
+<!-- DRE -->
+<div class="pg" id="pg-dre">
+  <div class="ptit">DRE — Demonstração de Resultado</div>
+  <div class="psub">Clique em qualquer linha para ver os lançamentos detalhados</div>
+  <div class="card" style="padding:8px" id="dre-body"></div>
+  <div class="panel" id="p-dre"><div class="ptitle" id="dre-pt">Detalhamento<button class="xbtn" onclick="closeP('p-dre')"><i class="ti ti-x"></i></button></div><div id="dre-pb"></div></div>
+</div>
+
+<!-- CONCILIAÇÃO -->
+<div class="pg" id="pg-conciliacao">
+  <div class="ptit">Conciliação Bancária</div>
+  <div class="psub">Extrato automático de tudo que entrou e saiu</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl">Entradas</div><div class="kval g" id="con-ent">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Saídas</div><div class="kval r" id="con-sai">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Saldo final</div><div class="kval b" id="con-sal">R$ 0,00</div></div>
+  </div>
+  <div class="card"><div class="twrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Categoria</th><th>Pgto</th><th>Valor</th><th>Saldo acum.</th></tr></thead><tbody id="con-tb"></tbody></table></div></div>
+</div>
+
+<!-- CONTAS A PAGAR -->
+<div class="pg" id="pg-pagar">
+  <div class="ptit">Contas a Pagar</div>
+  <div class="psub">Controle de vencimentos e fornecedores</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl">Total a pagar</div><div class="kval r" id="cp-tot">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Já pago</div><div class="kval g" id="cp-pago">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Em aberto</div><div class="kval a" id="cp-ab">R$ 0,00</div></div>
+  </div>
+  <div class="card">
+    <div class="row4">
+      <div><label>Vencimento</label><input type="date" id="cp-venc"></div>
+      <div><label>Fornecedor</label><input type="text" id="cp-forn" placeholder="Nome"></div>
+      <div><label>Categoria</label><select id="cp-cat"><option>Compra Mercadoria</option><option>Compra Água</option><option>Brindes</option><option>Aluguel</option><option>Salários</option><option>Taxas</option><option>Utilities</option><option>Marketing</option><option>Outros</option></select></div>
+      <div><label>Valor (R$)</label><input type="number" id="cp-val" step="0.01"></div>
+    </div>
+    <div class="row2">
+      <div><label>Pagamento</label><select id="cp-pgto"><option>PIX</option><option>Boleto</option><option>Dinheiro</option><option>TED</option><option>Débito automático</option></select></div>
+      <div><label>Descrição</label><input type="text" id="cp-desc" placeholder="Ex: Compra gás 50 unidades"></div>
+    </div>
+    <button class="btn p" onclick="addCP()"><i class="ti ti-plus"></i> Adicionar</button>
+  </div>
+  <div class="card"><div class="twrap"><table><thead><tr><th>Vencimento</th><th>Fornecedor</th><th>Categoria</th><th>Descrição</th><th>Valor</th><th>Pgto</th><th>Status</th><th></th></tr></thead><tbody id="cp-tb"></tbody></table></div></div>
+</div>
+
+<!-- CONTAS A RECEBER -->
+<div class="pg" id="pg-receber">
+  <div class="ptit">Contas a Receber</div>
+  <div class="psub">Fiados e vendas a prazo</div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl">Total a receber</div><div class="kval g" id="cr-tot">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Recebido</div><div class="kval b" id="cr-rec">R$ 0,00</div></div>
+    <div class="kcard"><div class="klbl">Pendente</div><div class="kval a" id="cr-pend">R$ 0,00</div></div>
+  </div>
+  <div class="card">
+    <div class="row4">
+      <div><label>Data da venda</label><input type="date" id="cr-data"></div>
+      <div><label>Cliente</label><input type="text" id="cr-cli" placeholder="Nome"></div>
+      <div><label>Produto / Descrição</label><input type="text" id="cr-desc" placeholder="Ex: Gás 13kg x2"></div>
+      <div><label>Valor (R$)</label><input type="number" id="cr-val" step="0.01"></div>
+    </div>
+    <div class="row2">
+      <div><label>Vencimento</label><input type="date" id="cr-venc"></div>
+      <div><label>Tipo</label><select id="cr-tipo"><option>Fiado</option><option>Cartão (a receber)</option><option>PIX pendente</option><option>Cheque</option><option>Outro</option></select></div>
+    </div>
+    <button class="btn p" onclick="addCR()"><i class="ti ti-plus"></i> Adicionar</button>
+  </div>
+  <div class="card"><div class="twrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Descrição</th><th>Tipo</th><th>Vencimento</th><th>Valor</th><th>Status</th><th></th></tr></thead><tbody id="cr-tb"></tbody></table></div></div>
+</div>
+
+<!-- CLIENTES -->
+<div class="pg" id="pg-clientes">
+  <div class="ptit">Clientes</div>
+  <div class="psub">Número do galão salvo para próximas entregas</div>
+  <div class="card">
+    <div class="row4">
+      <div><label>Nome</label><input type="text" id="cl-nome"></div>
+      <div><label>Telefone / WhatsApp</label><input type="text" id="cl-tel" placeholder="(11) 99999-9999"></div>
+      <div><label>Endereço / Bairro</label><input type="text" id="cl-end"></div>
+      <div><label>Produto preferido</label><select id="cl-prod"><option>Gás 13kg</option><option>Gás 45kg</option><option>Água 20L</option><option>Gás + Água</option></select></div>
+    </div>
+    <div class="row4">
+      <div><label>Forma de pagamento</label><select id="cl-pgto"><option>Dinheiro</option><option>PIX</option><option>Débito</option><option>Crédito</option><option>Fiado</option></select></div>
+      <div><label>Número do galão</label><input type="text" id="cl-galao" placeholder="Ex: GAL-042"></div>
+      <div><label>Canal de compra</label><select id="cl-canal"><option>Portaria</option><option>Aplicativo</option><option>Comércio</option><option>WhatsApp</option><option>Direto na loja</option></select></div>
+      <div><label>Observação</label><input type="text" id="cl-obs" placeholder="Ex: entrega toda segunda"></div>
+    </div>
+    <button class="btn p" onclick="addCli()"><i class="ti ti-user-plus"></i> Cadastrar</button>
+  </div>
+  <div class="card"><div class="twrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>Produto</th><th>Pgto</th><th>Galão</th><th>Canal</th><th>Obs</th><th></th></tr></thead><tbody id="cl-tb"></tbody></table></div></div>
+</div>
+
+<!-- MAQUININHA -->
+<div class="pg" id="pg-maquininha">
+  <div class="ptit">Calculadora de Taxa</div>
+  <div class="psub">Valor líquido após a taxa da maquininha</div>
+  <div class="two">
+    <div class="card">
+      <div style="margin-bottom:10px"><label>Valor da venda (R$)</label><input type="number" id="mq-val" value="100" step="0.01" oninput="calcMaq()"></div>
+      <div style="margin-bottom:10px"><label>Parcelas</label><select id="mq-parc" onchange="calcMaq()"><option value="1">À vista</option><option value="2">2x</option><option value="3">3x</option><option value="6">6x</option><option value="12">12x</option></select></div>
+      <div class="res" id="mq-res"></div>
+    </div>
+    <div class="card">
+      <div class="ctit">Tabela de taxas</div>
+      <div class="twrap"><table><thead><tr><th>Modalidade</th><th>Taxa</th><th>Líquido (R$100)</th></tr></thead><tbody>
+        <tr><td>Débito</td><td>1,50%</td><td style="color:var(--green)">R$ 98,50</td></tr>
+        <tr><td>Crédito à vista</td><td>2,50%</td><td style="color:var(--green)">R$ 97,50</td></tr>
+        <tr><td>Crédito 2x</td><td>3,20%</td><td style="color:var(--green)">R$ 96,80</td></tr>
+        <tr><td>Crédito 3x–6x</td><td>4,00%</td><td style="color:var(--green)">R$ 96,00</td></tr>
+        <tr><td>Crédito 7x–12x</td><td>5,20%</td><td style="color:var(--green)">R$ 94,80</td></tr>
+        <tr><td>PIX</td><td>0,00%</td><td style="color:var(--green)">R$ 100,00</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRECIFICAÇÃO -->
+<div class="pg" id="pg-precificacao">
+  <div class="ptit">Calculadora de Precificação</div>
+  <div class="psub">Descubra seu lucro real por produto</div>
+  <div class="two">
+    <div class="card">
+      <div style="margin-bottom:10px"><label>Produto</label><input type="text" id="pr-prod" placeholder="Ex: Gás 13kg" oninput="calcPreco()"></div>
+      <div style="margin-bottom:10px"><label>Preço de venda (R$)</label><input type="number" id="pr-venda" step="0.01" placeholder="Ex: 125,00" oninput="calcPreco()"></div>
+      <div style="margin-bottom:10px"><label>Custo de compra (R$)</label><input type="number" id="pr-custo" step="0.01" placeholder="Ex: 90,00" oninput="calcPreco()"></div>
+      <div style="margin-bottom:10px"><label>Tipo da taxa</label><select id="pr-tipo" onchange="updTaxaLbl();calcPreco()"><option value="fixo">Valor fixo (R$)</option><option value="pct">Porcentagem (%)</option></select></div>
+      <div style="margin-bottom:10px"><label id="pr-taxa-lbl">Taxa da maquininha (R$)</label><input type="number" id="pr-taxa" step="0.01" value="2" oninput="calcPreco()"></div>
+      <div style="margin-bottom:10px"><label>Outros custos por unidade (R$)</label><input type="number" id="pr-outros" step="0.01" value="0" oninput="calcPreco()"></div>
+      <div style="margin-bottom:10px"><label>Imposto / Simples (%)</label><input type="number" id="pr-imp" step="0.1" value="0" oninput="calcPreco()"></div>
+    </div>
+    <div>
+      <div class="card" id="pr-res-card" style="display:none">
+        <div class="ctit" id="pr-res-tit">Resultado</div>
+        <div style="background:var(--bg3);border-radius:8px;padding:12px">
+          <div class="pr-rrow"><span>Preço de venda</span><span id="r-venda">—</span></div>
+          <div class="pr-rrow"><span>(-) Taxa maquininha</span><span id="r-taxa" style="color:var(--red)">—</span></div>
+          <div class="pr-rrow"><span>(-) Imposto</span><span id="r-imp" style="color:var(--red)">—</span></div>
+          <div class="pr-rrow"><span>(-) Custo de compra</span><span id="r-custo" style="color:var(--red)">—</span></div>
+          <div class="pr-rrow"><span>(-) Outros custos</span><span id="r-outros" style="color:var(--red)">—</span></div>
+          <div class="pr-rrow"><span style="font-size:14px;font-weight:600">Lucro líquido real</span><span id="r-lucro" style="font-size:22px;font-weight:700">—</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;flex-wrap:wrap;gap:8px">
+          <div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Margem</div><span id="r-margem">—</span></div>
+          <div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Markup</div><span id="r-markup">—</span></div>
+          <div><div style="font-size:10px;color:var(--text2);margin-bottom:3px">Lucro/un</div><span id="r-lucun">—</span></div>
+        </div>
+        <div style="margin-top:14px">
+          <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px">Preço mínimo para não ter prejuízo</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:var(--bg3);padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--text2)">Dinheiro / PIX</div><div style="font-size:16px;font-weight:600;color:var(--green)" id="min-din">—</div></div>
+            <div style="background:var(--bg3);padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--text2)">Com maquininha</div><div style="font-size:16px;font-weight:600;color:var(--accent)" id="min-maq">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const fmt=v=>'R$ '+Number(v||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fdate=d=>d?d.split('-').reverse().join('/'):'-';
+const today=()=>new Date().toISOString().split('T')[0];
+const nowt=()=>new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+// ── Dados com localStorage ──
+function load(key,def){try{const v=localStorage.getItem('loja_'+key);return v?JSON.parse(v):def;}catch{return def;}}
+function save(key,val){try{localStorage.setItem('loja_'+key,JSON.stringify(val));showSaved();}catch{}}
+function showSaved(){const el=document.getElementById('save-ind');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1500);}
+
+let vendas=load('vendas',[]),estoque=load('estoque',[]),caixa=load('caixa',[]);
+let cpagar=load('cpagar',[]),creceber=load('creceber',[]),clientes=load('clientes',[]);
+let ch1=null,ch2=null;
+
+document.getElementById('sdate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'numeric',month:'short'});
+['v-data','e-data','fc-data','cp-venc','cr-data','cr-venc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today();});
+
+function nav(p){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nav').forEach(x=>x.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  document.getElementById('n-'+p).classList.add('on');
+  if(p==='dashboard')updDash();
+  if(p==='dre')renderDRE();
+  if(p==='conciliacao')renderConc();
+  if(p==='vendas'||p==='estoque'){updEstCards();renderEst();}
+  if(p==='caixa'){renderCaixa();updCaixaKPIs();}
+  if(p==='pagar')updCP();
+  if(p==='receber')updCR();
+  if(p==='clientes')renderCli();
+}
+
+function togglePanel(id){
+  const el=document.getElementById(id);const was=el.classList.contains('on');
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.kcard').forEach(x=>x.classList.remove('on'));
+  if(!was){el.classList.add('on');document.getElementById('k-'+id.replace('p-','')).classList.add('on');fillPanel(id);el.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+function closeP(id){document.getElementById(id).classList.remove('on');document.querySelectorAll('.kcard').forEach(x=>x.classList.remove('on'));}
+
+function tbl(items,cols){
+  if(!items.length)return'<p style="font-size:12px;color:var(--text2);padding:6px">Sem registros.</p>';
+  return`<div class="twrap"><table><thead><tr>${cols.map(c=>`<th>${c.l}</th>`).join('')}</tr></thead><tbody>${items.map(i=>`<tr>${cols.map(c=>`<td>${c.f(i)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function catGrid(items,cor){
+  const cats={};items.forEach(i=>{cats[i.cat]=(cats[i.cat]||0)+i.val;});
+  if(!Object.keys(cats).length)return'<p style="font-size:12px;color:var(--text2)">Sem dados.</p>';
+  return`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:10px">${Object.entries(cats).map(([k,v])=>`<div style="background:var(--bg3);padding:8px;border-radius:8px"><div style="font-size:10px;color:var(--text2)">${k}</div><div style="font-size:14px;font-weight:600;color:${cor}">${fmt(v)}</div></div>`).join('')}</div>`;
+}
+
+function fillPanel(id){
+  const tRec=caixa.filter(c=>c.tipo==='Receita').reduce((s,c)=>s+c.val,0);
+  const tDesp=caixa.filter(c=>c.tipo==='Despesa').reduce((s,c)=>s+c.val,0);
+  const brindes=vendas.filter(v=>v.prod.includes('Gás')).reduce((s,v)=>s+parseInt(v.qtd),0);
+  const lucro=tRec-tDesp;
+  const map={
+    'p-fat':()=>catGrid(caixa.filter(c=>c.tipo==='Receita'),'var(--green)')+tbl(caixa.filter(c=>c.tipo==='Receita'),[{l:'Data',f:i=>fdate(i.data)},{l:'Categoria',f:i=>i.cat},{l:'Descrição',f:i=>i.desc},{l:'Valor',f:i=>`<span style="color:var(--green)">${fmt(i.val)}</span>`},{l:'Pgto',f:i=>i.pgto}]),
+    'p-gas':()=>tbl(vendas.filter(v=>v.prod.includes('Gás')),[{l:'Data',f:i=>fdate(i.data)},{l:'Produto',f:i=>i.prod},{l:'Qtd',f:i=>i.qtd},{l:'Total',f:i=>`<span style="color:var(--green)">${fmt(i.total)}</span>`},{l:'Pgto',f:i=>i.pgto},{l:'Canal',f:i=>i.canal}]),
+    'p-agua':()=>tbl(vendas.filter(v=>v.prod==='Água 20L'),[{l:'Data',f:i=>fdate(i.data)},{l:'Qtd',f:i=>i.qtd},{l:'Total',f:i=>`<span style="color:var(--green)">${fmt(i.total)}</span>`},{l:'Pgto',f:i=>i.pgto},{l:'Canal',f:i=>i.canal}]),
+    'p-brinde':()=>`<p style="font-size:12px;margin-bottom:8px">Total entregues: <strong>${brindes}</strong></p>`+tbl(vendas.filter(v=>v.prod.includes('Gás')),[{l:'Data',f:i=>fdate(i.data)},{l:'Produto',f:i=>i.prod},{l:'Qtd vendida',f:i=>i.qtd},{l:'Brindes',f:i=>`<span style="color:var(--amber)">${i.qtd}</span>`}]),
+    'p-desp':()=>catGrid(caixa.filter(c=>c.tipo==='Despesa'),'var(--red)')+tbl(caixa.filter(c=>c.tipo==='Despesa'),[{l:'Data',f:i=>fdate(i.data)},{l:'Categoria',f:i=>i.cat},{l:'Descrição',f:i=>i.desc},{l:'Valor',f:i=>`<span style="color:var(--red)">${fmt(i.val)}</span>`},{l:'Pgto',f:i=>i.pgto}]),
+    'p-lucro':()=>`<div class="res"><div class="resrow"><span>Receita total</span><span style="color:var(--green)">${fmt(tRec)}</span></div><div class="resrow"><span>Despesas</span><span style="color:var(--red)">${fmt(tDesp)}</span></div><div class="resrow"><span>Lucro líquido</span><span style="color:${lucro>=0?'var(--green)':'var(--red)'}">${fmt(lucro)}</span></div><div class="resrow"><span>Margem</span><span>${tRec>0?((lucro/tRec)*100).toFixed(1):0}%</span></div></div>`,
+  };
+  const el=document.getElementById('c-'+id.replace('p-',''));
+  if(el&&map[id])el.innerHTML=map[id]();
+}
+
+function updDash(){
+  const tRec=caixa.filter(c=>c.tipo==='Receita').reduce((s,c)=>s+c.val,0);
+  const tDesp=caixa.filter(c=>c.tipo==='Despesa').reduce((s,c)=>s+c.val,0);
+  const tGas=vendas.filter(v=>v.prod.includes('Gás')).reduce((s,v)=>s+v.total,0);
+  const tAg=vendas.filter(v=>v.prod==='Água 20L').reduce((s,v)=>s+v.total,0);
+  const brindes=vendas.filter(v=>v.prod.includes('Gás')).reduce((s,v)=>s+parseInt(v.qtd),0);
+  const lucro=tRec-tDesp;
+  document.getElementById('kv-fat').textContent=fmt(tRec);
+  document.getElementById('kv-gas').textContent=fmt(tGas);
+  document.getElementById('kv-agua').textContent=fmt(tAg);
+  document.getElementById('kv-brinde').textContent=brindes+' un';
+  document.getElementById('kv-desp').textContent=fmt(tDesp);
+  const lEl=document.getElementById('kv-lucro');lEl.textContent=fmt(lucro);lEl.className='kval '+(lucro>=0?'g':'r');
+  const tb=document.getElementById('dash-tb');
+  if(vendas.length){tb.innerHTML=vendas.slice(-8).reverse().map(v=>`<tr><td>${fdate(v.data)}</td><td>${v.prod}</td><td>${v.qtd}</td><td style="color:var(--green);font-weight:600">${fmt(v.total)}</td><td>${v.pgto}</td><td><span class="badge bgr">${v.canal}</span></td><td>${v.prod.includes('Gás')?`<span class="badge ba">${v.qtd}x</span>`:'-'}</td></tr>`).join('');}
+  else{tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:16px">Nenhuma venda registrada</td></tr>';}
+  if(ch1){ch1.destroy();ch1=null;}if(ch2){ch2.destroy();ch2=null;}
+  const cats={};vendas.forEach(v=>{cats[v.prod]=(cats[v.prod]||0)+v.total;});
+  const c1=document.getElementById('ch1');
+  if(c1&&Object.keys(cats).length)ch1=new Chart(c1,{type:'doughnut',data:{labels:Object.keys(cats),datasets:[{data:Object.values(cats),backgroundColor:['#2563EB','#059669','#D97706'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:11}}}}}});
+  const c2=document.getElementById('ch2');
+  if(c2)ch2=new Chart(c2,{type:'bar',data:{labels:['Receitas','Despesas','Lucro'],datasets:[{data:[tRec,tDesp,lucro],backgroundColor:['#059669','#DC2626',lucro>=0?'#2563EB':'#DC2626'],borderWidth:0,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'R$'+Math.round(v)}}}}});
+}
+
+function saldoEst(prod){
+  let s=estoque.filter(e=>e.prod===prod).reduce((a,e)=>a+e.qtd,0);
+  vendas.forEach(v=>{if(v.prod===prod)s-=parseInt(v.qtd);if(prod==='Brinde'&&v.prod.includes('Gás'))s-=parseInt(v.qtd);});
+  return Math.max(0,s);
+}
+function updEstCards(){
+  const prods=['Gás 13kg','Gás 45kg','Água 20L','Brinde'];
+  const eids=['g13','g45','ag','br'];const vids=['vst-g13','vst-g45','vst-ag','vst-br'];const max=[100,20,50,100];
+  prods.forEach((p,i)=>{
+    const s=saldoEst(p);
+    [document.getElementById('e-'+eids[i]),document.getElementById(vids[i])].forEach(el=>{if(el)el.textContent=s+' un';});
+    const bar=document.getElementById('eb-'+eids[i]);if(bar)bar.style.width=Math.min(100,(s/max[i]*100))+'%';
+  });
+}
+
+function calcV(){
+  const qtd=parseInt(document.getElementById('v-qtd').value)||0;
+  const preco=parseFloat(document.getElementById('v-preco').value)||0;
+  const prod=document.getElementById('v-prod').value;
+  document.getElementById('v-total').textContent=fmt(qtd*preco);
+  document.getElementById('v-brinfo').textContent=prod.includes('Gás')?`+ ${qtd} brinde(s) descontado(s) automaticamente`:'';
+}
+
+function regVenda(){
+  const prod=document.getElementById('v-prod').value;if(!prod){alert('Selecione o produto');return;}
+  const preco=parseFloat(document.getElementById('v-preco').value)||0;if(!preco){alert('Informe o preço');return;}
+  const qtd=document.getElementById('v-qtd').value;
+  const data=document.getElementById('v-data').value;
+  const pgto=document.getElementById('v-pgto').value;
+  const canal=document.getElementById('v-canal').value;
+  const entregador=document.getElementById('v-entregador').value;
+  const total=parseInt(qtd)*preco;
+  vendas.push({data,hora:nowt(),prod,qtd,preco,total,pgto,canal,entregador});
+  save('vendas',vendas);
+  caixa.push({data,tipo:'Receita',cat:prod.includes('Gás')?'Vendas Gás':'Vendas Água',desc:`Venda ${prod} x${qtd} — ${canal}`,val:total,pgto});
+  save('caixa',caixa);
+  renderVendas();updEstCards();updCaixaKPIs();
+  document.getElementById('v-prod').value='';document.getElementById('v-preco').value='';
+  document.getElementById('v-total').textContent='R$ 0,00';document.getElementById('v-brinfo').textContent='';
+}
+function renderVendas(){
+  const tb=document.getElementById('v-tb');
+  if(!vendas.length){tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text2);padding:16px">Nenhuma venda</td></tr>';return;}
+  tb.innerHTML=vendas.slice().reverse().map((v,ri)=>`<tr><td>${v.hora||'-'}</td><td>${fdate(v.data)}</td><td><strong>${v.prod}</strong></td><td>${v.qtd}</td><td>${fmt(v.preco)}</td><td style="color:var(--green);font-weight:600">${fmt(v.total)}</td><td>${v.pgto}</td><td><span class="badge bgr">${v.canal}</span></td><td style="color:var(--text2)">${v.entregador||'-'}</td><td>${v.prod.includes('Gás')?`<span class="badge ba">${v.qtd}x</span>`:'-'}</td><td><button class="btn sm" onclick="delVenda(${vendas.length-1-ri})"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+function delVenda(i){if(confirm('Remover esta venda?')){vendas.splice(i,1);save('vendas',vendas);const idx=caixa.findIndex(c=>c.desc&&c.desc.includes(vendas[i]?.prod||''));renderVendas();updEstCards();updCaixaKPIs();renderCaixa();}}
+
+function lancarEst(){
+  const data=document.getElementById('e-data').value;const prod=document.getElementById('e-prod').value;
+  const qtd=parseInt(document.getElementById('e-qtd').value)||0;if(!qtd){alert('Informe a quantidade');return;}
+  const forn=document.getElementById('e-forn').value;const custo=parseFloat(document.getElementById('e-custo').value)||0;
+  const obs=document.getElementById('e-obs').value;
+  estoque.push({data,tipo:'Entrada',prod,qtd,forn,custo,obs});save('estoque',estoque);
+  if(custo>0){caixa.push({data,tipo:'Despesa',cat:prod==='Água 20L'?'Compra Água':prod==='Brinde'?'Brindes':'Compra Mercadoria',desc:`Compra ${prod} x${qtd} — ${forn}`,val:qtd*custo,pgto:'PIX'});save('caixa',caixa);}
+  renderEst();updEstCards();updCaixaKPIs();
+  document.getElementById('e-qtd').value='1';document.getElementById('e-custo').value='';document.getElementById('e-forn').value='';document.getElementById('e-obs').value='';
+}
+function renderEst(){
+  const all=[...estoque];
+  vendas.forEach(v=>{all.push({data:v.data,tipo:'Saída (venda)',prod:v.prod,qtd:-parseInt(v.qtd),forn:'—',custo:0,obs:'Auto'});if(v.prod.includes('Gás'))all.push({data:v.data,tipo:'Saída (brinde)',prod:'Brinde',qtd:-parseInt(v.qtd),forn:'—',custo:0,obs:'Auto'});});
+  all.sort((a,b)=>b.data.localeCompare(a.data));
+  const tb=document.getElementById('e-tb');
+  if(!all.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:16px">Nenhuma movimentação</td></tr>';return;}
+  tb.innerHTML=all.map(e=>`<tr><td>${fdate(e.data)}</td><td><span class="badge ${e.tipo.startsWith('Entrada')?'bg':'br'}">${e.tipo}</span></td><td>${e.prod}</td><td>${e.forn||'—'}</td><td style="font-weight:600;color:${e.qtd>0?'var(--green)':'var(--red)'}">${e.qtd>0?'+':''}${e.qtd}</td><td>${e.custo?fmt(e.custo):'-'}</td><td>${e.custo&&e.qtd?fmt(Math.abs(e.qtd)*e.custo):'-'}</td><td style="color:var(--text2)">${e.obs||'-'}</td></tr>`).join('');
+}
+
+function updCaixaKPIs(){
+  const ent=caixa.filter(c=>c.tipo==='Receita').reduce((s,c)=>s+c.val,0);
+  const sai=caixa.filter(c=>c.tipo==='Despesa').reduce((s,c)=>s+c.val,0);
+  document.getElementById('fc-ent').textContent=fmt(ent);document.getElementById('fc-sai').textContent=fmt(sai);
+  const sal=ent-sai;const el=document.getElementById('fc-sal');el.textContent=fmt(sal);el.className='kval '+(sal>=0?'g':'r');
+}
+function lancarCaixa(){
+  const val=parseFloat(document.getElementById('fc-val').value)||0;if(!val){alert('Informe o valor');return;}
+  const data=document.getElementById('fc-data').value;const tipo=document.getElementById('fc-tipo').value;
+  const cat=document.getElementById('fc-cat').value;const desc=document.getElementById('fc-desc').value||cat;
+  const pgto=document.getElementById('fc-pgto').value;
+  caixa.push({data,tipo,cat,desc,val,pgto});save('caixa',caixa);
+  if(pgto==='Fiado'&&tipo==='Receita'){creceber.push({data,cli:'Fiado',desc,tipo:'Fiado',venc:data,val,status:'Pendente'});save('creceber',creceber);updCR();}
+  renderCaixa();updCaixaKPIs();
+  document.getElementById('fc-desc').value='';document.getElementById('fc-val').value='';
+}
+function renderCaixa(){
+  const tb=document.getElementById('fc-tb');
+  if(!caixa.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:16px">Nenhum lançamento</td></tr>';return;}
+  tb.innerHTML=caixa.slice().reverse().map((c,ri)=>`<tr><td>${fdate(c.data)}</td><td><span class="badge ${c.tipo==='Receita'?'bg':'br'}">${c.tipo}</span></td><td>${c.cat}</td><td>${c.desc}</td><td style="color:${c.tipo==='Receita'?'var(--green)':'var(--red)'};font-weight:600">${fmt(c.val)}</td><td>${c.pgto}</td><td><button class="btn sm" onclick="delCaixa(${caixa.length-1-ri})"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+function delCaixa(i){if(confirm('Remover?')){caixa.splice(i,1);save('caixa',caixa);renderCaixa();updCaixaKPIs();}}
+
+function renderDRE(){
+  const rec={},desp={};
+  caixa.forEach(c=>{if(c.tipo==='Receita')rec[c.cat]=(rec[c.cat]||0)+c.val;else desp[c.cat]=(desp[c.cat]||0)+c.val;});
+  const tRec=Object.values(rec).reduce((a,b)=>a+b,0);
+  const cmv=(desp['Compra Mercadoria']||0)+(desp['Compra Água']||0)+(desp['Brindes']||0);
+  const lBruto=tRec-cmv;
+  const opFix=(desp['Aluguel']||0)+(desp['Salários']||0)+(desp['Utilities']||0)+(desp['Marketing']||0)+(desp['Taxas']||0)+(desp['Outros']||0);
+  const lOp=lBruto-opFix;const tDesp=Object.values(desp).reduce((a,b)=>a+b,0);const lLiq=tRec-tDesp;
+  const margem=tRec>0?((lLiq/tRec)*100).toFixed(1):0;
+  const dr=(label,val,cls,indent,key)=>`<div class="drow ${cls} ${indent?'di':''}" ${key?`onclick="dreD('${key}','${label}')"`:'style="cursor:default"'}><span>${label}</span><span>${val!==null?fmt(val):''}</span></div>`;
+  document.getElementById('dre-body').innerHTML=dr('Receita bruta',tRec,'dh',false,'')+Object.entries(rec).map(([k,v])=>dr(k,v,'',true,`rec:${k}`)).join('')+dr('(-) CMV — Custo das mercadorias',cmv,'dt',false,'cmv')+dr('= Lucro bruto',lBruto,lBruto>=0?'dl':'dp',false,'lb')+dr('(-) Despesas operacionais',opFix,'dh',false,'')+['Aluguel','Salários','Utilities','Marketing','Taxas','Outros'].map(k=>desp[k]?dr(k,desp[k],'',true,`desp:${k}`):'').join('')+dr('= Lucro operacional (EBITDA)',lOp,lOp>=0?'dl':'dp',false,'lo')+`<div style="height:6px"></div>`+dr('★ Lucro líquido do mês',lLiq,lLiq>=0?'dl':'dp',false,'ll')+`<div class="drow" style="cursor:default;color:var(--text2);font-size:11px"><span>Margem líquida</span><span>${margem}%</span></div>`;
+}
+function dreD(key,label){
+  let items=[];
+  if(key.startsWith('rec:'))items=caixa.filter(c=>c.tipo==='Receita'&&c.cat===key.slice(4));
+  else if(key==='cmv')items=caixa.filter(c=>c.tipo==='Despesa'&&['Compra Mercadoria','Compra Água','Brindes'].includes(c.cat));
+  else if(key.startsWith('desp:'))items=caixa.filter(c=>c.tipo==='Despesa'&&c.cat===key.slice(5));
+  else items=caixa;
+  document.getElementById('dre-pt').innerHTML=`${label}<button class="xbtn" onclick="closeP('p-dre')"><i class="ti ti-x"></i></button>`;
+  document.getElementById('dre-pb').innerHTML=items.length?`<div class="twrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Pgto</th></tr></thead><tbody>${items.map(i=>`<tr><td>${fdate(i.data)}</td><td>${i.desc}</td><td style="color:${i.tipo==='Receita'?'var(--green)':'var(--red)'}">${fmt(i.val)}</td><td>${i.pgto}</td></tr>`).join('')}</tbody></table></div>`:'<p style="font-size:12px;color:var(--text2);padding:6px">Sem lançamentos.</p>';
+  document.getElementById('p-dre').classList.add('on');document.getElementById('p-dre').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function renderConc(){
+  const sorted=[...caixa].sort((a,b)=>a.data.localeCompare(b.data));let saldo=0;
+  const ent=sorted.filter(c=>c.tipo==='Receita').reduce((s,c)=>s+c.val,0);
+  const sai=sorted.filter(c=>c.tipo==='Despesa').reduce((s,c)=>s+c.val,0);
+  document.getElementById('con-ent').textContent=fmt(ent);document.getElementById('con-sai').textContent=fmt(sai);document.getElementById('con-sal').textContent=fmt(ent-sai);
+  const tb=document.getElementById('con-tb');
+  if(!sorted.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:16px">Nenhum lançamento</td></tr>';return;}
+  tb.innerHTML=sorted.map(c=>{saldo+=c.tipo==='Receita'?c.val:-c.val;return`<tr><td>${fdate(c.data)}</td><td>${c.desc}</td><td><span class="badge ${c.tipo==='Receita'?'bg':'br'}">${c.tipo}</span></td><td>${c.cat}</td><td>${c.pgto}</td><td style="color:${c.tipo==='Receita'?'var(--green)':'var(--red)'};font-weight:600">${c.tipo==='Receita'?'+':'-'} ${fmt(c.val)}</td><td style="font-weight:600;color:${saldo>=0?'var(--accent)':'var(--red)'}">${fmt(saldo)}</td></tr>`;}).join('');
+}
+
+function updCP(){
+  const tot=cpagar.reduce((s,c)=>s+c.val,0);const pago=cpagar.filter(c=>c.status==='Pago').reduce((s,c)=>s+c.val,0);
+  document.getElementById('cp-tot').textContent=fmt(tot);document.getElementById('cp-pago').textContent=fmt(pago);document.getElementById('cp-ab').textContent=fmt(tot-pago);
+  const tb=document.getElementById('cp-tb');
+  if(!cpagar.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:16px">Nenhuma conta</td></tr>';return;}
+  tb.innerHTML=cpagar.map((c,i)=>`<tr><td>${fdate(c.venc)}</td><td>${c.forn||'-'}</td><td>${c.cat}</td><td>${c.desc||'-'}</td><td style="color:var(--red);font-weight:600">${fmt(c.val)}</td><td>${c.pgto}</td><td><span class="badge ${c.status==='Pago'?'bg':'br'}">${c.status}</span></td><td style="display:flex;gap:4px">${c.status!=='Pago'?`<button class="btn sm" style="color:var(--green)" onclick="pagarCP(${i})"><i class="ti ti-check"></i></button>`:''}<button class="btn sm" onclick="delCP(${i})"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+function addCP(){
+  const val=parseFloat(document.getElementById('cp-val').value)||0;if(!val){alert('Informe o valor');return;}
+  cpagar.push({venc:document.getElementById('cp-venc').value,forn:document.getElementById('cp-forn').value,cat:document.getElementById('cp-cat').value,val,pgto:document.getElementById('cp-pgto').value,desc:document.getElementById('cp-desc').value,status:'A Pagar'});save('cpagar',cpagar);updCP();
+  document.getElementById('cp-val').value='';document.getElementById('cp-desc').value='';document.getElementById('cp-forn').value='';
+}
+function pagarCP(i){cpagar[i].status='Pago';caixa.push({data:today(),tipo:'Despesa',cat:cpagar[i].cat,desc:cpagar[i].desc||cpagar[i].forn,val:cpagar[i].val,pgto:cpagar[i].pgto});save('cpagar',cpagar);save('caixa',caixa);updCP();updCaixaKPIs();}
+function delCP(i){if(confirm('Remover?')){cpagar.splice(i,1);save('cpagar',cpagar);updCP();}}
+
+function updCR(){
+  const tot=creceber.reduce((s,c)=>s+c.val,0);const rec=creceber.filter(c=>c.status==='Recebido').reduce((s,c)=>s+c.val,0);
+  document.getElementById('cr-tot').textContent=fmt(tot);document.getElementById('cr-rec').textContent=fmt(rec);document.getElementById('cr-pend').textContent=fmt(tot-rec);
+  const tb=document.getElementById('cr-tb');
+  if(!creceber.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:16px">Nenhuma conta</td></tr>';return;}
+  tb.innerHTML=creceber.map((c,i)=>`<tr><td>${fdate(c.data)}</td><td>${c.cli||'-'}</td><td>${c.desc||'-'}</td><td><span class="badge bb">${c.tipo||'Fiado'}</span></td><td>${fdate(c.venc)}</td><td style="color:var(--green);font-weight:600">${fmt(c.val)}</td><td><span class="badge ${c.status==='Recebido'?'bg':'ba'}">${c.status}</span></td><td style="display:flex;gap:4px">${c.status!=='Recebido'?`<button class="btn sm" style="color:var(--green)" onclick="receberCR(${i})"><i class="ti ti-check"></i></button>`:''}<button class="btn sm" onclick="delCR(${i})"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+function addCR(){
+  const val=parseFloat(document.getElementById('cr-val').value)||0;if(!val){alert('Informe o valor');return;}
+  creceber.push({data:document.getElementById('cr-data').value,cli:document.getElementById('cr-cli').value,desc:document.getElementById('cr-desc').value,tipo:document.getElementById('cr-tipo').value,venc:document.getElementById('cr-venc').value,val,status:'Pendente'});save('creceber',creceber);updCR();
+  document.getElementById('cr-cli').value='';document.getElementById('cr-desc').value='';document.getElementById('cr-val').value='';
+}
+function receberCR(i){creceber[i].status='Recebido';caixa.push({data:today(),tipo:'Receita',cat:'Outras Receitas',desc:`Recebimento: ${creceber[i].cli} — ${creceber[i].desc}`,val:creceber[i].val,pgto:'Dinheiro'});save('creceber',creceber);save('caixa',caixa);updCR();updCaixaKPIs();}
+function delCR(i){if(confirm('Remover?')){creceber.splice(i,1);save('creceber',creceber);updCR();}}
+
+function addCli(){
+  const nome=document.getElementById('cl-nome').value;if(!nome){alert('Informe o nome');return;}
+  clientes.push({nome,tel:document.getElementById('cl-tel').value,end:document.getElementById('cl-end').value,prod:document.getElementById('cl-prod').value,pgto:document.getElementById('cl-pgto').value,galao:document.getElementById('cl-galao').value,canal:document.getElementById('cl-canal').value,obs:document.getElementById('cl-obs').value});
+  save('clientes',clientes);renderCli();
+  ['cl-nome','cl-tel','cl-end','cl-galao','cl-obs'].forEach(id=>document.getElementById(id).value='');
+}
+function renderCli(){
+  const tb=document.getElementById('cl-tb');
+  if(!clientes.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:16px">Nenhum cliente</td></tr>';return;}
+  tb.innerHTML=clientes.map((c,i)=>`<tr><td><strong>${c.nome}</strong></td><td>${c.tel||'-'}</td><td><span class="badge bb">${c.prod}</span></td><td><span class="badge bgr">${c.pgto}</span></td><td style="color:var(--amber);font-weight:600">${c.galao||'-'}</td><td><span class="badge bgr">${c.canal||'-'}</span></td><td style="color:var(--text2)">${c.obs||'-'}</td><td><button class="btn sm" onclick="delCli(${i})"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+function delCli(i){if(confirm('Remover?')){clientes.splice(i,1);save('clientes',clientes);renderCli();}}
+
+function calcMaq(){
+  const val=parseFloat(document.getElementById('mq-val').value)||0;const parc=parseInt(document.getElementById('mq-parc').value)||1;
+  const taxas={1:0.025,2:0.032,3:0.04,6:0.04,12:0.052};const taxa=taxas[parc]||0.025;
+  const tVal=val*taxa;const liq=val-tVal;
+  document.getElementById('mq-res').innerHTML=`<div class="resrow"><span>Valor bruto</span><span>${fmt(val)}</span></div><div class="resrow"><span>Taxa (${(taxa*100).toFixed(2)}%)</span><span style="color:var(--red)">- ${fmt(tVal)}</span></div><div class="resrow"><span>Valor líquido</span><span style="color:var(--green)">${fmt(liq)}</span></div>${parc>1?`<div class="resrow"><span>Parcela (${parc}x)</span><span style="color:var(--accent)">${fmt(liq/parc)}</span></div>`:''}`;
+}
+
+function updTaxaLbl(){document.getElementById('pr-taxa-lbl').textContent=document.getElementById('pr-tipo').value==='fixo'?'Taxa da maquininha (R$)':'Taxa da maquininha (%)';}
+function calcPreco(){
+  const venda=parseFloat(document.getElementById('pr-venda').value)||0;
+  const custo=parseFloat(document.getElementById('pr-custo').value)||0;
+  const tipo=document.getElementById('pr-tipo').value;
+  const taxaInput=parseFloat(document.getElementById('pr-taxa').value)||0;
+  const outros=parseFloat(document.getElementById('pr-outros').value)||0;
+  const imp=(parseFloat(document.getElementById('pr-imp').value)||0)/100;
+  const prod=document.getElementById('pr-prod').value||'Produto';
+  const card=document.getElementById('pr-res-card');
+  if(!venda&&!custo){card.style.display='none';return;}
+  card.style.display='block';
+  const taxaVal=tipo==='fixo'?taxaInput:(venda*(taxaInput/100));
+  const impVal=venda*imp;const custoTotal=custo+outros;
+  const lucro=venda-taxaVal-impVal-custoTotal;
+  const margem=venda>0?((lucro/venda)*100):0;const markup=custoTotal>0?((lucro/custoTotal)*100):0;
+  document.getElementById('pr-res-tit').textContent=`Resultado — ${prod}`;
+  document.getElementById('r-venda').textContent=fmt(venda);
+  document.getElementById('r-taxa').textContent='- '+fmt(taxaVal);
+  document.getElementById('r-imp').textContent='- '+fmt(impVal);
+  document.getElementById('r-custo').textContent='- '+fmt(custo);
+  document.getElementById('r-outros').textContent='- '+fmt(outros);
+  const lEl=document.getElementById('r-lucro');lEl.textContent=fmt(lucro);lEl.style.color=lucro>=0?'var(--green)':'var(--red)';
+  const mCls=margem>=20?'badge-g':margem>=5?'badge-a':'badge-r';
+  const muCls=markup>=20?'badge-g':markup>=5?'badge-a':'badge-r';
+  document.getElementById('r-margem').className=mCls;document.getElementById('r-margem').textContent=margem.toFixed(1)+'%';
+  document.getElementById('r-markup').className=muCls;document.getElementById('r-markup').textContent=markup.toFixed(1)+'%';
+  document.getElementById('r-lucun').className=lucro>=0?'badge-g':'badge-r';document.getElementById('r-lucun').textContent=fmt(lucro);
+  const minDin=custoTotal*(1+imp);
+  const minMaq=tipo==='fixo'?minDin+taxaInput:minDin/(1-(taxaInput/100));
+  document.getElementById('min-din').textContent=fmt(minDin);document.getElementById('min-maq').textContent=fmt(minMaq);
+}
+
+// Inicializar
+calcMaq();calcPreco();updDash();renderVendas();updEstCards();updCaixaKPIs();renderCaixa();updCP();updCR();renderCli();
+</script>
+</body>
+</html>
